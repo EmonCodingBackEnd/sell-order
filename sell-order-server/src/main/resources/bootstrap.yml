@@ -1,0 +1,32 @@
+dynamic:
+  host: '@dynamic.host@'
+  url: http://${dynamic.host}
+  sslurl: https://${dynamic.host}
+
+spring:
+  application:
+    name: '@project.build.finalName@'
+  profiles:
+    active: dev
+eureka:
+  instance:
+    metadataMap:
+      tag: offline
+      weight: 100
+  client:
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: ${dynamic.url}:8761/eureka/
+      loadbalancer:
+        retry:
+          enabled: false
+#management:
+#  security:
+#    enabled: false
+
+# feign.RetryableException: Read timed out executing POST
+ribbon:
+  ReadTimeout: 20000
+  ConnectTimeout: 20000
+
