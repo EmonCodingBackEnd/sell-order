@@ -12,6 +12,7 @@
  ********************************************************************************/
 package com.coding.sell.service.impl;
 
+import com.coding.helpers.tool.cmp.generator.SnowFlakeIdGenerator;
 import com.coding.sell.common.DictDefinition;
 import com.coding.sell.domain.OrderMaster;
 import com.coding.sell.repository.OrderDetailRepository;
@@ -37,12 +38,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse create(OrderRequest request) {
         OrderResponse response = new OrderResponse();
-        OrderMaster orderMaster = new OrderMaster();
-        BeanUtils.copyProperties(request, orderMaster);
 
+        OrderMaster orderMaster = new OrderMaster();
+        Long orderId = SnowFlakeIdGenerator.getInstance().nextId();
+
+        BeanUtils.copyProperties(request, orderMaster);
         orderMaster.setOrderAmount(BigDecimal.ZERO);
         orderMaster.setOrderStatus(DictDefinition.OrderStatus.NEW.getValue());
         orderMaster.setPayStatus(DictDefinition.PayStatus.WAIT.getValue());
+        orderMaster.setId(orderId);
+        orderMasterRepository.save(orderMaster);
+
+        for (OrderRequest.ItemVO itemVO : request.getItemVOList()) {}
+
         return response;
     }
 }

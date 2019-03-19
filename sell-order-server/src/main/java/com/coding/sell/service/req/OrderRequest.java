@@ -14,13 +14,13 @@ package com.coding.sell.service.req;
 
 import com.coding.helpers.tool.cmp.api.AppRequest;
 import com.coding.sell.service.res.OrderResponse;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -29,22 +29,27 @@ public class OrderRequest extends AppRequest<OrderResponse> {
     private static final long serialVersionUID = 5969721550113922291L;
 
     @NotBlank(message = "姓名必填")
-    private String name;
+    @JsonProperty("name")
+    private String buyerName;
 
     @NotBlank(message = "手机号必填")
-    private String phone;
+    @JsonProperty("phone")
+    private String buyerPhone;
 
     @NotBlank(message = "地址必填")
-    private String address;
+    @JsonProperty("address")
+    private String buyerAddress;
 
     @NotBlank(message = "openid必填")
-    private String openid;
+    @JsonProperty("openid")
+    private String buyerOpenid;
 
-    @NotEmpty(message = "购买商品列表不允许为空")
-    private List<ProductVO> productVOList;
+    @NotEmpty(message = "购物车不允许为空")
+    @JsonProperty("items")
+    private List<ItemVO> itemVOList;
 
     @Data
-    public static class ProductVO implements Serializable {
+    public static class ItemVO implements Serializable {
 
         private static final long serialVersionUID = -1720615722275129764L;
 
@@ -52,28 +57,4 @@ public class OrderRequest extends AppRequest<OrderResponse> {
 
         private Integer productQuantity;
     }
-
-    /** 订单ID. */
-    private Long orderId;
-
-    /** 买家姓名. */
-    private String buyerName;
-
-    /** 买家电话. */
-    private String buyerPhone;
-
-    /** 买家地址. */
-    private String buyerAddress;
-
-    /** 买家微信openid. */
-    private String buyerOpenid;
-
-    /** 订单状态. */
-    private BigDecimal orderAmount;
-
-    /** 订单状态. */
-    private Integer orderStatus;
-
-    /** 支付状态. */
-    private Integer payStatus;
 }
