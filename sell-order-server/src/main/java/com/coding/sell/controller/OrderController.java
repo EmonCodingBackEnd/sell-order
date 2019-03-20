@@ -17,6 +17,7 @@ import com.coding.sell.service.req.OrderRequest;
 import com.coding.sell.service.res.OrderResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +28,7 @@ public class OrderController {
     @Autowired OrderService orderService;
 
     @PostMapping("/create")
-    public OrderResponse create(OrderRequest request) {
+    public OrderResponse create(@RequestBody OrderRequest request) {
         return orderService.create(request);
     }
 }
