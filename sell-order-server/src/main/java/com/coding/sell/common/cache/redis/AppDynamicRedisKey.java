@@ -17,8 +17,6 @@ import com.coding.sell.common.ConstantDefinition;
 
 public interface AppDynamicRedisKey extends AppBaseRedisKey {
 
-    String getKey();
-
     @Override
     default String getPrefix() {
         return ConstantDefinition.C_COMMON.SYSTEM_CODE;
