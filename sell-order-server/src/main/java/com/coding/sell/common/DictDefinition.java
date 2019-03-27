@@ -13,6 +13,7 @@
 package com.coding.sell.common;
 
 import com.coding.helpers.tool.cmp.exception.AppException;
+import com.coding.sell.exception.AppStatus;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +66,7 @@ public interface DictDefinition {
             }
         }
         log.error("【字典查询】根据字典值找不到对应字典, enumClazz={}, value={}", enumClazz, value);
-        throw new AppException(StatusDefinition.DICT_ENUM_NOT_EXIST);
+        throw new AppException(AppStatus.DICT_NOT_EXIST);
     }
 
     /** 根据Integer值获取枚举实例，如果找不到则抛异常. */
@@ -76,7 +77,7 @@ public interface DictDefinition {
             }
         }
         log.error("【字典查询】根据字典值找不到对应字典, enumClazz={}, value={}", enumClazz, value);
-        throw new AppException(StatusDefinition.DICT_ENUM_NOT_EXIST);
+        throw new AppException(AppStatus.DICT_NOT_EXIST);
     }
 
     // ==================================================华丽的分割线==================================================

@@ -14,6 +14,7 @@ package com.coding.sell.common;
 
 import com.coding.helpers.tool.cmp.exception.AppException;
 import com.coding.sell.common.param.ShopPrintSetupParam;
+import com.coding.sell.exception.AppStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -52,7 +53,7 @@ public class JsonConverter {
             param = gson.fromJson(paramValue, new TypeToken<ShopPrintSetupParam>() {}.getType());
         } catch (JsonSyntaxException e) {
             log.error(String.format("【JSON转换错误】JSON转换到对象错误, string=%s", paramValue), e);
-            throw new AppException(StatusDefinition.FROM_JSON_ERRPR);
+            throw new AppException(AppStatus.FROM_JSON_ERRPR);
         }
         return param;
     }
@@ -63,7 +64,7 @@ public class JsonConverter {
             paramValue = objectMapper.writeValueAsString(printParam);
         } catch (JsonProcessingException e) {
             log.error(String.format("【JSON转换错误】对象转换到JSON错误, object=%s", printParam), e);
-            throw new AppException(StatusDefinition.TO_JSON_ERRPR);
+            throw new AppException(AppStatus.TO_JSON_ERRPR);
         }
         return paramValue;
     }

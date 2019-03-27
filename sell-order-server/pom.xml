@@ -77,7 +77,7 @@
         </dependency>
         <dependency>
             <groupId>com.coding.helpers.tool</groupId>
-            <artifactId>tool-cmp-exception</artifactId>
+            <artifactId>tool-cmp-common</artifactId>
         </dependency>
         <!-- 引入二方包 end -->
 

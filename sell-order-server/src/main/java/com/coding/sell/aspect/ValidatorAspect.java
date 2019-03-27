@@ -14,7 +14,7 @@ package com.coding.sell.aspect;
 
 import com.coding.helpers.tool.cmp.api.AppRequest;
 import com.coding.helpers.tool.cmp.exception.AppException;
-import com.coding.sell.common.StatusDefinition;
+import com.coding.sell.exception.AppStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -49,7 +49,7 @@ public class ValidatorAspect {
                     break;
                 }
                 if (StringUtils.isNotEmpty(message)) {
-                    throw new AppException(StatusDefinition.PARAM_ERROR, message);
+                    throw new AppException(AppStatus.PARAM_ERROR, message);
                 }
             }
         }
