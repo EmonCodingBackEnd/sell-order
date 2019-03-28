@@ -41,9 +41,11 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse create(OrderRequest request) {
         OrderResponse response = new OrderResponse();
 
+        // TODO: 2019/3/28 参数校验
         // TODO: 2019/3/28 查询商品（调用商品服务）
         // TODO: 2019/3/28 计算总价
         // TODO: 2019/3/28 扣库存（调用商品服务）
+        // TODO: 2019/3/28 订单入库
 
         OrderMaster orderMaster = new OrderMaster();
         Long orderId = SnowFlakeIdGenerator.getInstance().nextId();

@@ -2,7 +2,7 @@
  * 文件名称：Configs.java
  * 系统名称：[系统名称]
  * 模块名称：[模块名称]
- * 软件版权：Copyright (c) 2011-2019, liming20110711@163.com All Rights Reserved. 
+ * 软件版权：Copyright (c) 2011-2019, liming20110711@163.com All Rights Reserved.
  * 功能说明：[请在此处输入功能说明]
  * 开发人员：Rushing0711
  * 创建日期：20190309 19:57
@@ -15,14 +15,17 @@ package com.coding.sell.common;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
-/** 
+/**
  * 项目通用配置.
- * 
+ *
  * <p>创建时间: <font style="color:#00FFFF">20190309 19:58</font><br>
  * [请在此输入功能详述]
- * 
+ *
  * @author Rushing0711
  * @version 1.0.0
  * @since 1.0.0
@@ -31,4 +34,11 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "common.config")
 @Slf4j
-public class ConfigDefinition {}
+public class ConfigDefinition {
+
+    @Bean
+    @LoadBalanced
+    public RestTemplate newRestTemplate() {
+        return new RestTemplate();
+    }
+}
