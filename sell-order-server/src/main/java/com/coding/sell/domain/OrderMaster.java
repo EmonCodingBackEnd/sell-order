@@ -62,7 +62,7 @@ public class OrderMaster extends BaseEntity {
     @Column(name = "buyer_openid")
     private String buyerOpenid;
 
-    /** 订单状态. */
+    /** 订单总金额. */
     @Column(name = "order_amount")
     private BigDecimal orderAmount;
 

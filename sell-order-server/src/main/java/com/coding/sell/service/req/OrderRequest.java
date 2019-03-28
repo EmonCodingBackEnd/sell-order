@@ -28,28 +28,33 @@ import java.util.List;
 public class OrderRequest extends AppRequest<OrderResponse> {
     private static final long serialVersionUID = 5969721550113922291L;
 
+    /** 买家姓名. */
     @NotBlank(message = "姓名必填")
     @JsonProperty("name")
     private String buyerName;
 
+    /** 买家手机号. */
     @NotBlank(message = "手机号必填")
     @JsonProperty("phone")
     private String buyerPhone;
 
+    /** 买家地址. */
     @NotBlank(message = "地址必填")
     @JsonProperty("address")
     private String buyerAddress;
 
+    /** 买家微信Openid. */
     @NotBlank(message = "openid必填")
     @JsonProperty("openid")
     private String buyerOpenid;
 
+    /** 订单详情. */
     @NotEmpty(message = "购物车不允许为空")
     @JsonProperty("items")
-    private List<ItemVO> itemVOList;
+    private List<ItemDTO> itemDTOList;
 
     @Data
-    public static class ItemVO implements Serializable {
+    public static class ItemDTO implements Serializable {
 
         private static final long serialVersionUID = -1720615722275129764L;
 

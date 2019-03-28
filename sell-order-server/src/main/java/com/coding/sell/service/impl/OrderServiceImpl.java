@@ -31,13 +31,19 @@ import java.math.BigDecimal;
 @Service
 @Slf4j
 public class OrderServiceImpl implements OrderService {
-    @Autowired OrderDetailRepository orderDetailRepository;
+
     @Autowired OrderMasterRepository orderMasterRepository;
+
+    @Autowired OrderDetailRepository orderDetailRepository;
 
     @Transactional
     @Override
     public OrderResponse create(OrderRequest request) {
         OrderResponse response = new OrderResponse();
+
+        // TODO: 2019/3/28 查询商品（调用商品服务）
+        // TODO: 2019/3/28 计算总价
+        // TODO: 2019/3/28 扣库存（调用商品服务）
 
         OrderMaster orderMaster = new OrderMaster();
         Long orderId = SnowFlakeIdGenerator.getInstance().nextId();
@@ -49,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
         orderMaster.setId(orderId);
         orderMasterRepository.save(orderMaster);
 
-        for (OrderRequest.ItemVO itemVO : request.getItemVOList()) {}
+        for (OrderRequest.ItemDTO itemDTO : request.getItemDTOList()) {}
 
         return response;
     }
