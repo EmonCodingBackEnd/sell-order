@@ -27,8 +27,6 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class ClientController {
 
-    @Autowired private LoadBalancerClient loadBalancerClient;
-
     // 第一种方式：直接使用restTemplate，url写死
     @GetMapping("/getProductMsg")
     public String getProductMsg() {
@@ -40,6 +38,8 @@ public class ClientController {
     }
 
     // 第二种方式：利用loadBalancerClient通过应用名获取url
+    @Autowired private LoadBalancerClient loadBalancerClient;
+
     @GetMapping("/getProductMsg2")
     public String getProductMsg2() {
         ServiceInstance serviceInstance = loadBalancerClient.choose("SELL-PRODUCT-PROVIDER");
