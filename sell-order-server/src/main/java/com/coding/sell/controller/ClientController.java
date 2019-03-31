@@ -12,6 +12,7 @@
  ********************************************************************************/
 package com.coding.sell.controller;
 
+import com.coding.sell.client.ProductClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -61,6 +62,16 @@ public class ClientController {
     public String getProductMsg3() {
         String response =
                 restTemplate.getForObject("http://SELL-PRODUCT-PROVIDER/product/msg", String.class);
+        log.info("response={}", response);
+        return response;
+    }
+
+    // 第四种方式：使用feign
+    @Autowired ProductClient productClient;
+
+    @GetMapping("/getProductMsg4")
+    public String getProductMsg4() {
+        String response = productClient.productMsg();
         log.info("response={}", response);
         return response;
     }
