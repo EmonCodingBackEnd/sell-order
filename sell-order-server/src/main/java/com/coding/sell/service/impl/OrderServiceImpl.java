@@ -13,6 +13,9 @@
 package com.coding.sell.service.impl;
 
 import com.coding.helpers.tool.cmp.generator.SnowFlakeIdGenerator;
+import com.coding.sell.client.ListForOrderRequest;
+import com.coding.sell.client.ListForOrderResponse;
+import com.coding.sell.client.ProductClient;
 import com.coding.sell.common.DictDefinition;
 import com.coding.sell.domain.OrderMaster;
 import com.coding.sell.repository.OrderDetailRepository;
@@ -23,10 +26,13 @@ import com.coding.sell.service.res.OrderResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -36,10 +42,26 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired OrderDetailRepository orderDetailRepository;
 
+    @Autowired ProductClient productClient;
+
     @Transactional
     @Override
     public OrderResponse create(OrderRequest request) {
         OrderResponse response = new OrderResponse();
+
+        List<Long> productIdList =
+                request.getItemDTOList()
+                        .stream()
+                        .map(OrderRequest.ItemDTO::getProductId)
+                        .collect(Collectors.toList());
+        ListForOrderRequest forOrderRequest = new ListForOrderRequest();
+        forOrderRequest.setProductIdList(productIdList);
+        ListForOrderResponse forOrderResponse = productClient.listForOrder(forOrderRequest);
+
+        BigDecimal orderAmount;
+        for (OrderRequest.ItemDTO itemDTO : request.getItemDTOList()) {
+            for (Product)
+        }
 
         // TODO: 2019/3/28 参数校验
         // TODO: 2019/3/28 查询商品（调用商品服务）

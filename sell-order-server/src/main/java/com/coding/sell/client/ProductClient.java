@@ -20,4 +20,7 @@ public interface ProductClient {
 
     @GetMapping("/product/msg")
     String productMsg();
+
+    @GetMapping("/product/listForOrder")
+    ListForOrderResponse listForOrder(ListForOrderRequest request);
 }
