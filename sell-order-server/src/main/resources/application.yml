@@ -58,3 +58,6 @@ helper:
   tool-cmp-api:
     nonidempotent:
       redis-key: helper:tool:cmp:api:nonidempotent
+
+logging:
+  config: classpath:logback-spring-${spring.profiles.active}.xml
