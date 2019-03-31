@@ -30,3 +30,8 @@ ribbon:
   ReadTimeout: 20000
   ConnectTimeout: 20000
 
+# 自定义ribbon规则，<clientName>需要大写，优先级： 灰度发布插件 > yml配置 > 默认
+SELL-PRODUCT-PROVIDER:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+
