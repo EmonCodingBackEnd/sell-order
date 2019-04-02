@@ -14,6 +14,7 @@ package com.coding.sell.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @FeignClient(name = "SELL-PRODUCT-PROVIDER")
 public interface ProductClient {
@@ -21,6 +22,6 @@ public interface ProductClient {
     @GetMapping("/product/msg")
     String productMsg();
 
-    @GetMapping("/product/listForOrder")
+    @PostMapping("/product/listForOrder")
     ListForOrderResponse listForOrder(ListForOrderRequest request);
 }

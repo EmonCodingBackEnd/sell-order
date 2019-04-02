@@ -17,6 +17,7 @@ import com.coding.sell.client.ListForOrderRequest;
 import com.coding.sell.client.ListForOrderResponse;
 import com.coding.sell.client.ProductClient;
 import com.coding.sell.common.DictDefinition;
+import com.coding.sell.domain.OrderDetail;
 import com.coding.sell.domain.OrderMaster;
 import com.coding.sell.repository.OrderDetailRepository;
 import com.coding.sell.repository.OrderMasterRepository;
@@ -26,7 +27,6 @@ import com.coding.sell.service.res.OrderResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,19 +49,37 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse create(OrderRequest request) {
         OrderResponse response = new OrderResponse();
 
+        OrderMaster orderMaster = new OrderMaster();
+        Long orderId = SnowFlakeIdGenerator.getInstance().nextId();
+
         List<Long> productIdList =
-                request.getItemDTOList()
+                request.getOrderDetailDTOList()
                         .stream()
-                        .map(OrderRequest.ItemDTO::getProductId)
+                        .map(OrderRequest.OrderDetailDTO::getProductId)
                         .collect(Collectors.toList());
         ListForOrderRequest forOrderRequest = new ListForOrderRequest();
         forOrderRequest.setProductIdList(productIdList);
         ListForOrderResponse forOrderResponse = productClient.listForOrder(forOrderRequest);
+        List<ListForOrderResponse.ItemVO> itemVOList = forOrderResponse.getData();
 
-        BigDecimal orderAmount;
-        for (OrderRequest.ItemDTO itemDTO : request.getItemDTOList()) {
-            for (Product)
+        BigDecimal orderAmount = BigDecimal.ZERO;
+        for (OrderRequest.OrderDetailDTO orderDetailDTO : request.getOrderDetailDTOList()) {
+            OrderDetail orderDetail = new OrderDetail();
+            for (ListForOrderResponse.ItemVO itemVO : itemVOList) {
+                if (itemVO.getId().equals(orderDetailDTO.getProductId())) {
+                    orderAmount =
+                            itemVO.getProductPrice()
+                                    .multiply(new BigDecimal(orderDetailDTO.getProductQuantity()))
+                                    .add(orderAmount);
+                    BeanUtils.copyProperties(itemVO, orderDetail);
+                    orderDetail.setOrderId(orderId);
+                }
+            }
         }
+
+        request.getOrderDetailDTOList().stream().map(e->{
+
+        });
 
         // TODO: 2019/3/28 参数校验
         // TODO: 2019/3/28 查询商品（调用商品服务）
@@ -69,8 +87,7 @@ public class OrderServiceImpl implements OrderService {
         // TODO: 2019/3/28 扣库存（调用商品服务）
         // TODO: 2019/3/28 订单入库
 
-        OrderMaster orderMaster = new OrderMaster();
-        Long orderId = SnowFlakeIdGenerator.getInstance().nextId();
+
 
         BeanUtils.copyProperties(request, orderMaster);
         orderMaster.setOrderAmount(BigDecimal.ZERO);
@@ -79,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
         orderMaster.setId(orderId);
         orderMasterRepository.save(orderMaster);
 
-        for (OrderRequest.ItemDTO itemDTO : request.getItemDTOList()) {}
+        for (OrderRequest.OrderDetailDTO itemDTO : request.getItemDTOList()) {}
 
         return response;
     }

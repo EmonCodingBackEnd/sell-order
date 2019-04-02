@@ -50,11 +50,11 @@ public class OrderRequest extends AppRequest<OrderResponse> {
 
     /** 订单详情. */
     @NotEmpty(message = "购物车不允许为空")
-    @JsonProperty("items")
-    private List<ItemDTO> itemDTOList;
+    @JsonProperty("details")
+    private List<OrderDetailDTO> orderDetailDTOList;
 
     @Data
-    public static class ItemDTO implements Serializable {
+    public static class OrderDetailDTO implements Serializable {
 
         private static final long serialVersionUID = -1720615722275129764L;
 
