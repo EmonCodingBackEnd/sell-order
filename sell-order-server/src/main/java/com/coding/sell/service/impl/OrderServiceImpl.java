@@ -77,6 +77,8 @@ public class OrderServiceImpl implements OrderService {
                                     .multiply(new BigDecimal(orderDetailDTO.getProductQuantity()))
                                     .add(orderAmount);
                     BeanUtils.copyProperties(itemVO, orderDetail);
+                    orderDetail.setProductId(itemVO.getId());
+                    orderDetail.setProductQuantity(orderDetailDTO.getProductQuantity());
                     orderDetail.setOrderId(orderId);
 
                     // 订单详情入库
