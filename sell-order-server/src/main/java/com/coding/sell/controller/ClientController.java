@@ -12,24 +12,22 @@
  ********************************************************************************/
 package com.coding.sell.controller;
 
-import com.coding.sell.client.ProductClient;
+import com.coding.sell.client.product.ProductClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
-@RequestMapping("/order")
 @Slf4j
 public class ClientController {
 
     // 第一种方式：直接使用restTemplate，url写死
-    @GetMapping("/getProductMsg")
+    @GetMapping("/order/getProductMsg")
     public String getProductMsg() {
         RestTemplate restTemplate = new RestTemplate();
         String response =
@@ -41,7 +39,7 @@ public class ClientController {
     // 第二种方式：利用loadBalancerClient通过应用名获取url
     @Autowired private LoadBalancerClient loadBalancerClient;
 
-    @GetMapping("/getProductMsg2")
+    @GetMapping("/order/getProductMsg2")
     public String getProductMsg2() {
         ServiceInstance serviceInstance = loadBalancerClient.choose("SELL-PRODUCT-PROVIDER");
         String url =
@@ -58,7 +56,7 @@ public class ClientController {
     @Qualifier("newRestTemplate")
     RestTemplate restTemplate;
 
-    @GetMapping("/getProductMsg3")
+    @GetMapping("/order/getProductMsg3")
     public String getProductMsg3() {
         String response =
                 restTemplate.getForObject("http://SELL-PRODUCT-PROVIDER/product/msg", String.class);
@@ -69,9 +67,9 @@ public class ClientController {
     // 第四种方式：使用feign
     @Autowired ProductClient productClient;
 
-    @GetMapping("/getProductMsg4")
+    @GetMapping("/order/getProductMsg4")
     public String getProductMsg4() {
-        String response = productClient.productMsg();
+        String response = productClient.msg();
         log.info("response={}", response);
         return response;
     }

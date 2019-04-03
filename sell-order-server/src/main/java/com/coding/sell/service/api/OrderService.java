@@ -12,8 +12,8 @@
  ********************************************************************************/
 package com.coding.sell.service.api;
 
-import com.coding.sell.service.req.OrderRequest;
-import com.coding.sell.service.res.OrderResponse;
+import com.coding.sell.order.service.req.OrderRequest;
+import com.coding.sell.order.service.res.OrderResponse;
 
 public interface OrderService {
 

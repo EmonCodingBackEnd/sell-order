@@ -13,17 +13,19 @@
 package com.coding.sell.service.impl;
 
 import com.coding.helpers.tool.cmp.generator.SnowFlakeIdGenerator;
-import com.coding.sell.client.ListForOrderRequest;
-import com.coding.sell.client.ListForOrderResponse;
-import com.coding.sell.client.ProductClient;
+import com.coding.sell.client.product.ProductClient;
 import com.coding.sell.common.DictDefinition;
 import com.coding.sell.domain.OrderDetail;
 import com.coding.sell.domain.OrderMaster;
+import com.coding.sell.order.service.req.OrderRequest;
+import com.coding.sell.order.service.res.OrderResponse;
+import com.coding.sell.product.service.req.DecreaseStockRequest;
+import com.coding.sell.product.service.req.ListForOrderRequest;
+import com.coding.sell.product.service.res.DecreaseStockResponse;
+import com.coding.sell.product.service.res.ListForOrderResponse;
 import com.coding.sell.repository.OrderDetailRepository;
 import com.coding.sell.repository.OrderMasterRepository;
 import com.coding.sell.service.api.OrderService;
-import com.coding.sell.service.req.OrderRequest;
-import com.coding.sell.service.res.OrderResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +54,7 @@ public class OrderServiceImpl implements OrderService {
         OrderMaster orderMaster = new OrderMaster();
         Long orderId = SnowFlakeIdGenerator.getInstance().nextId();
 
+        // 查询商品信息（调用商品服务）
         List<Long> productIdList =
                 request.getOrderDetailDTOList()
                         .stream()
@@ -62,41 +65,52 @@ public class OrderServiceImpl implements OrderService {
         ListForOrderResponse forOrderResponse = productClient.listForOrder(forOrderRequest);
         List<ListForOrderResponse.ItemVO> itemVOList = forOrderResponse.getData();
 
+        // 计算总价
         BigDecimal orderAmount = BigDecimal.ZERO;
         for (OrderRequest.OrderDetailDTO orderDetailDTO : request.getOrderDetailDTOList()) {
             OrderDetail orderDetail = new OrderDetail();
             for (ListForOrderResponse.ItemVO itemVO : itemVOList) {
                 if (itemVO.getId().equals(orderDetailDTO.getProductId())) {
+                    // 单价*数量
                     orderAmount =
                             itemVO.getProductPrice()
                                     .multiply(new BigDecimal(orderDetailDTO.getProductQuantity()))
                                     .add(orderAmount);
                     BeanUtils.copyProperties(itemVO, orderDetail);
                     orderDetail.setOrderId(orderId);
+
+                    // 订单详情入库
+                    orderDetailRepository.save(orderDetail);
                 }
             }
         }
 
-        request.getOrderDetailDTOList().stream().map(e->{
+        // 扣库存（调用商品服务）
+        DecreaseStockRequest decreaseStockRequest = new DecreaseStockRequest();
+        List<DecreaseStockRequest.CartDTO> cartDTOList =
+                request.getOrderDetailDTOList()
+                        .stream()
+                        .map(
+                                e -> {
+                                    DecreaseStockRequest.CartDTO cartDTO =
+                                            new DecreaseStockRequest.CartDTO();
+                                    cartDTO.setProductId(e.getProductId());
+                                    cartDTO.setProductQuantity(e.getProductQuantity());
+                                    return cartDTO;
+                                })
+                        .collect(Collectors.toList());
+        decreaseStockRequest.setCartDTOList(cartDTOList);
+        DecreaseStockResponse decreaseStockResponse =
+                productClient.decreaseStock(decreaseStockRequest);
 
-        });
-
-        // TODO: 2019/3/28 参数校验
-        // TODO: 2019/3/28 查询商品（调用商品服务）
-        // TODO: 2019/3/28 计算总价
-        // TODO: 2019/3/28 扣库存（调用商品服务）
-        // TODO: 2019/3/28 订单入库
-
-
-
+        // 订单入库
         BeanUtils.copyProperties(request, orderMaster);
-        orderMaster.setOrderAmount(BigDecimal.ZERO);
+        orderMaster.setOrderAmount(orderAmount);
         orderMaster.setOrderStatus(DictDefinition.OrderStatus.NEW.getValue());
         orderMaster.setPayStatus(DictDefinition.PayStatus.WAIT.getValue());
         orderMaster.setId(orderId);
-        orderMasterRepository.save(orderMaster);
 
-        for (OrderRequest.OrderDetailDTO itemDTO : request.getItemDTOList()) {}
+        orderMasterRepository.save(orderMaster);
 
         return response;
     }

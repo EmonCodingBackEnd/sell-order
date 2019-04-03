@@ -12,22 +12,20 @@
  ********************************************************************************/
 package com.coding.sell.controller;
 
+import com.coding.sell.order.service.req.OrderRequest;
+import com.coding.sell.order.service.res.OrderResponse;
 import com.coding.sell.service.api.OrderService;
-import com.coding.sell.service.req.OrderRequest;
-import com.coding.sell.service.res.OrderResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/order")
 public class OrderController {
 
     @Autowired OrderService orderService;
 
-    @PostMapping("/create")
+    @PostMapping("/order/create")
     public OrderResponse create(@RequestBody OrderRequest request) {
         return orderService.create(request);
     }

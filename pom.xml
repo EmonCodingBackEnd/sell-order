@@ -11,7 +11,7 @@
     <name>sell-order</name>
 
     <modules>
-        <module>sell-order-api</module>
+        <module>sell-order-client</module>
         <module>sell-order-common</module>
         <module>sell-order-server</module>
     </modules>
@@ -27,6 +27,8 @@
         <dynamic.host>repo.emon.vip</dynamic.host>
         <dynamic.url>http://${dynamic.host}</dynamic.url>
         <dynamic.sslurl>https://${dynamic.host}</dynamic.sslurl>
+
+        <sell.product.version>1.0.0-SNAPSHOT</sell.product.version>
     </properties>
 
     <dependencyManagement>
@@ -35,12 +37,17 @@
             <!-- 定义三方包 end -->
 
             <!-- 定义二方包 beg -->
+            <dependency>
+                <groupId>com.coding.sell</groupId>
+                <artifactId>sell-product-client</artifactId>
+                <version>${sell.product.version}</version>
+            </dependency>
             <!-- 定义二方包 end -->
 
             <!-- 定义一方包 beg -->
             <dependency>
                 <groupId>com.coding.sell</groupId>
-                <artifactId>sell-order-api</artifactId>
+                <artifactId>sell-order-client</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

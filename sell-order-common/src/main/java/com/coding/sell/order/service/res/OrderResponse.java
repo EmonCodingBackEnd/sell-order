@@ -1,4 +1,4 @@
-package com.coding.sell.service.res;
+package com.coding.sell.order.service.res;
 
 import com.coding.helpers.tool.cmp.api.AppResponse;
 import lombok.Data;

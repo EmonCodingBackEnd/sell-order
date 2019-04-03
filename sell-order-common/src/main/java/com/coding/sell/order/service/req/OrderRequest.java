@@ -10,10 +10,10 @@
  * <Version>        <DateSerial>        <Author>        <Description>
  * 1.0.0            20190318-01         Rushing0711     M201903182219 新建文件
  ********************************************************************************/
-package com.coding.sell.service.req;
+package com.coding.sell.order.service.req;
 
 import com.coding.helpers.tool.cmp.api.AppRequest;
-import com.coding.sell.service.res.OrderResponse;
+import com.coding.sell.order.service.res.OrderResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
