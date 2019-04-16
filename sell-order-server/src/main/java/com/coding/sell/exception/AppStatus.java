@@ -28,9 +28,14 @@ import lombok.Getter;
 @Getter
 public enum AppStatus implements AppBaseStatus {
     PARAM_ERROR(1010000, "请求参数错误"),
+    OBJECT_NOT_EXIST(1031000, "对象不存在"),
     DICT_NOT_EXIST(1031001, "根据字典值找不到对应字典"),
+    OBJECT_CONVERT_ERROR(1032000, "对象转换异常"),
     FROM_JSON_ERRPR(1032001, "JSON转换到对象错误"),
     TO_JSON_ERRPR(1032002, "对象转换到JSON错误"),
+    OBJECT_EXIST(1033000, "对象已存在"),
+    BUSINESS_CHECK_ERROR(1034000, "业务检查异常异常"),
+    INNER_SERVER_ERROR(1035000, "调用内部服务错误"),
     ;
 
     private Integer errorCode;

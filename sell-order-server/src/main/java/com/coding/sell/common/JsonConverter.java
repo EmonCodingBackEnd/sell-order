@@ -15,6 +15,7 @@ package com.coding.sell.common;
 import com.coding.helpers.tool.cmp.exception.AppException;
 import com.coding.sell.common.param.ShopPrintSetupParam;
 import com.coding.sell.exception.AppStatus;
+import com.coding.sell.product.message.DecreaseStockMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -23,6 +24,8 @@ import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * JSON转换器.
@@ -67,5 +70,18 @@ public class JsonConverter {
             throw new AppException(AppStatus.TO_JSON_ERRPR);
         }
         return paramValue;
+    }
+
+    public static List<DecreaseStockMessage> toDecreaseStockMessage(String message) {
+        List<DecreaseStockMessage> decreaseStockMessageList;
+        try {
+            decreaseStockMessageList =
+                    gson.fromJson(
+                            message, new TypeToken<List<DecreaseStockMessage>>() {}.getType());
+        } catch (JsonSyntaxException e) {
+            log.error(String.format("【JSON转换错误】JSON转换到对象错误, string=%s", message), e);
+            throw new AppException(AppStatus.FROM_JSON_ERRPR);
+        }
+        return decreaseStockMessageList;
     }
 }
